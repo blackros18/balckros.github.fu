@@ -7,9 +7,13 @@ glyphs. The only icon source in the file is the component set **`Icons`**
 (`54:2746`, frame "Icons" inside the `Design System` section) — **59 variants**, plus one
 loose star used by the `Rating` component.
 
-The **Main design** page does not introduce any new icon artwork: all 890+ icon nodes there
-(`Icon`, `Icons`, `Vector`) are instances of this one set, so de-duplicating the set fixes
-the whole file.
+The **Main design** page does *not* draw only from that set — roughly nine out of ten icon
+slots there are hand-placed artwork from a second, unrelated icon family. That is catalogued
+separately in [§4](#4-off-system-icons-on-the-main-design-page).
+
+> **Node IDs:** the `54:*` / `68:*` / `111:*` / `138:*` IDs in §1–§3 are on the Design System
+> page (`20:2`) and are stable. The Main design page was re-created after this audit was
+> first written — its nodes are now `276:*`, and any older ID for that page is dead.
 
 ---
 
@@ -166,3 +170,78 @@ npm. Each file is a 24 dp grid drawing (`viewBox="0 -960 960 960"`), single path
 3. While in the set, also fix: the `y=44` variants back to `y=20`, `Analytics` from 20×20 to
    24×24, `arrow left` to integer coordinates, and rename
    `User Acitvity` → `User Activity`, `cancel` → `close`, `analytics`/`Analytics` → one variant.
+
+---
+
+## 4. Off-system icons on the Main design page
+
+Scanned from the `Pro Plan` section (`276:2825`), which is representative of the whole
+Main design page. Counts are for that section; the page-wide figure is given where it differs.
+
+**Ratio: 42 `Icons` instances from the design system vs ~326 hand-placed icon slots.**
+
+These are a different icon family altogether — thin rounded ~1.5 px stroke, frequently
+colour-filled, drawn at 11–32 px — sitting alongside the 24 px Material-style `Icons` set.
+Most are frames named `Icon` with no component behind them, so they update nowhere.
+
+### 4.1 No equivalent in the design system — need to be added
+
+| Glyph | Size | Uses | Example node | Where |
+|---|---|---|---|---|
+| Lightning bolt / zap (green) | 18 | — | `276:2851` | KPI cards |
+| Bot / robot face (blue) | 18 | — | `276:2869` | KPI cards — AI decisions |
+| Alert-circle with badge (red) | 18 | — | `276:2887` | KPI cards — chargebacks |
+| Shield | 18 | — | `276:2905` | KPI cards — protection |
+| Sparkles / AI stars (green) | 18 | — | `276:4421` | Widget · Visual Branding |
+| Warning triangle (red) | 14 | — | `276:3202` | Activity feed |
+| Refresh / rotate-cw (blue) | 14 | — | `276:3224` | Activity feed |
+| Rocket | 16 | — | `276:3334` | Empty state |
+| Shopping bag | 20 | — | `276:5482` | Integrations cards |
+| Trend arrow down (red) | 12 | — | `276:5063` | Analytics & Reports |
+| Shield-check | 24 | — | `276:7123` | Usage & Plan |
+| Folder / small square | 11 | 1 | `276:4109` | Automation Rules |
+| Arrow-up · arrow-up-left · arrow-down-left | 20 | 12 | `276:4499` · `276:4494` · `276:4509` | Widget position picker |
+
+18 px KPI slots total 61 uses, 14 px feed slots 43, 20 px slots 12, 12 px slots 8.
+
+### 4.2 Duplicate art for icons that already exist in the set
+
+| Glyph | Size | Uses | Example node | Existing variant |
+|---|---|---|---|---|
+| `lock` | 16 | 48 *(195 page-wide)* | `276:6394` | `Lock` — `138:7315` |
+| Sort caret — **raw vector**, not even a frame | 4.52×9.6 | 37 *(98 page-wide)* | `276:3763` | `keyboard arrow down` — `54:2780` |
+| Check-circle (green, thin) | 14 / 15 | — | `276:3213`, `276:3648` | `Tick mark` — `54:2805` |
+| Eye | 13 | — | `276:3085` | `Eye` — `54:2838` |
+| External-link / open-in-new | 13 | — | `276:3111` | `Preview` — `111:2481` |
+| Undo / curved arrow (amber, green) | 14 / 13 | — | `276:3235`, `276:4053` | `Decline` — `54:2796` |
+| Filter / sort lines | 16 | 25 | `276:3037`, `276:4114` | `Filter` — `68:2126` |
+| Search-with-dot, 2 variants | 15 | 24 | `276:3700`, `276:4074` | `Search bar` / `User Acitvity` |
+| Arrow-right | 15 | — | `276:3043` | `arrow right` — `54:2790` *(a chevron)* |
+| Trend arrow up (green) | 12 | — | `276:2860` | `Upline` — `54:2799` |
+| Message-square bubble | 24 | 4 | `276:4598`, `276:4760` | `Chat` — `54:2874` |
+| File-upload | 32 | 1 | `276:4794` | `Save` / `Download` |
+| `logout` | 18 | 4 *(15 page-wide)* | `276:5002` | `logout` — `54:2777` |
+
+13 px slots total 58 uses, 15 px 24, 16 px 25.
+
+### 4.3 Empty icon slots
+
+Frames named `Icon` that render nothing: `276:3919` (13 px) and `276:3999` (16 px), both on
+Order & AI Logs.
+
+### 4.4 Not icons — do not sweep these up
+
+Line-chart, donut, stacked-bar and tooltip vectors under the `SVG` groups on Merchant
+Dashboard (`276:2933`, `276:2977`) and Analytics & Reports (`276:5126`, `276:5164`,
+`276:5284`), and the 40×40 colour swatches on Widget · Visual Branding (`276:4448`).
+
+### 4.5 Three problems, in priority order
+
+1. **A second icon family is in use.** The ~13 glyphs in §4.1 have no counterpart in the set
+   at all — they need drawing and adding as variants, not just re-linking.
+2. **Duplicate art for icons that already exist** (§4.2). Every one of these should become an
+   instance of the existing variant; the sort caret in particular is loose vector art repeated
+   98 times across the page.
+3. **Off-grid sizing.** Icons appear at 11, 12, 13, 14, 15, 16, 18, 20, 24 and 32 px against a
+   24 px set. Even correctly-sourced icons are being scaled arbitrarily — pick a size ramp
+   (e.g. 16 / 20 / 24) and add it as a variant property instead.
